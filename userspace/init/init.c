@@ -9,7 +9,7 @@ extern struct userspace_program __stop_userspace_programs[];
 
 static const uint32_t RESULT_X = 16;
 static const uint32_t RESULT_Y = 16;
-static const uint64_t DELAY_LOOPS = 500000000; // ~very long delay, visible
+static const uint64_t DELAY_LOOPS = 500000000; // Not neccersary long delay of doom that will be replaced with the RTC based delay in the next devlog
 
 static void report_status(const char *name, int result, uint32_t x, uint32_t y) {
     switch (result) {
