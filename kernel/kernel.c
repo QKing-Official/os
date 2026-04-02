@@ -20,6 +20,7 @@ static volatile struct limine_framebuffer_request fb_req = {
 };
 
 extern void init_main(const char *prog_name);
+extern char stack_top[];
 
 // Minimal strlen not lazy at all!
 static size_t k_strlen(const char *s) {
@@ -58,6 +59,13 @@ static void k_sprintf_time(char *buf, uint8_t h, uint8_t m, uint8_t s) {
 }
 
 void kmain(void) {
+    // Set up our own stack so deep call chains don't triple fault
+    __asm__ volatile (
+        "mov %0, %%rsp\n"
+        :: "r"(stack_top)
+        : "memory"
+    );
+
     // Initialize framebuffer
     draw_init(fb_req.response->framebuffers[0]);
     fill_rect(0, 0, screen_width(), screen_height(), 0xFF0D1117);
@@ -88,11 +96,11 @@ void kmain(void) {
     k_sprintf_time(time_buf, h, m, s);
     draw_string(16, screen_height() - 20, time_buf, 2);
 
-    // Wait 5 seconds
-    timer_delay_s(5);
+    // Wait 2 seconds
+    timer_delay_s(2);
 
-    // THIS IS COOL! (Run init with target program drawing)
-    init_main("drawing");
+    // THIS IS COOL! (Run init with target program)
+    init_main("shell");
 
     while (1) __asm__("hlt");
 }

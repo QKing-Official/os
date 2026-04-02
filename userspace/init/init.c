@@ -9,7 +9,9 @@ extern struct userspace_program __stop_userspace_programs[];
 
 static const uint32_t RESULT_X = 16;
 static const uint32_t RESULT_Y = 16;
-static const uint64_t DELAY_LOOPS = 500000000; // Not neccersary long delay of doom that will be replaced with the RTC based delay in the next devlog
+
+// Reduced drastically - 500000000 nops fired timer/keyboard faults when called from shell
+static const uint64_t DELAY_LOOPS = 10000000;
 
 static void report_status(const char *name, int result, uint32_t x, uint32_t y) {
     switch (result) {
@@ -47,20 +49,20 @@ void init_main(const char *prog_name) {
 
     if (!prog) {
         draw_string(x, y, "Program not found!", 2);
-        while(1) __asm__("hlt");
+        // Return instead of halt so shell can recover and reprint prompt
+        return;
     }
 
     int res = 1;
     if (prog->test) res = prog->test();
     report_status(prog_name, res, x, y);
 
-    // === LONG WAIT SO USER CAN SEE THE RESULT ===
+    // Short wait so user can see the [OK] status before screen clears
     busy_wait(DELAY_LOOPS);
 
     // Clear screen and launch program
     fill_rect(0, 0, screen_width(), screen_height(), get_bg());
     prog->main();
 
-    draw_string(x, y, "[WARNING] Program returned!", 2);
-    while(1) __asm__("hlt");
+    // Program returned
 }

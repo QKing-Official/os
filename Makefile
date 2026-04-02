@@ -2,7 +2,7 @@ CC      = x86_64-linux-gnu-gcc
 LD      = x86_64-linux-gnu-ld
 CFLAGS  = -m64 -ffreestanding -fno-stack-protector \
           -mno-red-zone -nostdlib -Ikernel -Ilibraries \
-          -mgeneral-regs-only -O2 -mcmodel=large
+          -mgeneral-regs-only -O2 -mcmodel=large -fno-pic -fno-pie
 LDFLAGS = -nostdlib -static -m elf_x86_64 -z max-page-size=0x1000
 
 SRC_DIRS := kernel libraries userspace

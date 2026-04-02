@@ -23,11 +23,11 @@ SECTIONS {
         KEEP(*(.limine_requests_end))
     } :rodata
 
-    /* Userspace programs section (top-level, separate) */
+    /* Userspace programs - symbols defined INSIDE so they are exact, no padding tricks */
     .userspace_programs : ALIGN(8) {
-        KEEP(*(.userspace_programs*))
-        /* fallback for empty section if no program exists */
-        KEEP(*(.userspace_programs_empty))
+        __start_userspace_programs = .;
+        KEEP(*(.userspace_programs))
+        __stop_userspace_programs = .;
     } :rodata
 
     /* Data section */
@@ -35,13 +35,15 @@ SECTIONS {
         *(.data .data.*)
     } :data
 
-    /* BSS section */
+    /* BSS + kernel stack */
     .bss : ALIGN(0x1000) {
         *(.bss .bss.*)
         *(COMMON)
+
+        /* 64KB kernel stack - enough for deep shell/program call chains */
+        . = ALIGN(16);
+        stack_bottom = .;
+        . += 0x10000;
+        stack_top = .;
     } :data
 }
-
-/* Symbols for iterating userspace programs */
-__start_userspace_programs = ADDR(.userspace_programs);
-__stop_userspace_programs  = ADDR(.userspace_programs) + SIZEOF(.userspace_programs);
