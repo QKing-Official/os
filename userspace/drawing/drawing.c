@@ -1,10 +1,13 @@
 #include "../../libraries/draw.h"
 #include "../../libraries/font.h"
 #include "../../libraries/keyboard.h"
+#include "../../libraries/power.h"
 #include "../userspace.h"
 
 static uint32_t cursor_x = 100;
 static uint32_t cursor_y = 100;
+
+// Not used but idk, I love colors
 
 static uint32_t colors[] = {
     0xFFFFFFFF, // white
@@ -27,7 +30,7 @@ void drawing_main(void) {
     fill_rect(0, 0, screen_width(), screen_height(), get_bg());
 
     draw_string(20, 20,
-        "Drawing: WASD move | SPACE draw | C clear \ Q quit",
+        "Drawing: WASD move and draw | C clear \ Q quit",
         2);
 
     keyboard_init();
@@ -38,13 +41,13 @@ void drawing_main(void) {
         if (!key)
             continue;
 
-        // move
+        // move tbe cursor 
         if (key == 'w' && cursor_y > 0) cursor_y -= 4;
         if (key == 's' && cursor_y < screen_height()-6) cursor_y += 4;
         if (key == 'a' && cursor_x > 0) cursor_x -= 4;
         if (key == 'd' && cursor_x < screen_width()-6) cursor_x += 4;
 
-        // draw the actual pixel
+        // draw the actual pixel in white due broken color select
 
         if (key == ' ')
             fill_rect(cursor_x, cursor_y, 4, 4, colors[current_color]);
@@ -57,7 +60,7 @@ void drawing_main(void) {
         // go away
 
         if (key == 'q')
-            while (1) __asm__("hlt");
+            return;
 
         draw_cursor();
     }
@@ -78,7 +81,7 @@ int drawing_test(void) {
 }
 
 // Best thing ever, dynamic program definition
-__attribute__((used, section(".userspace_programs")))
+__attribute__((used, section(".userspace_programs"), aligned(1)))
 struct userspace_program drawing_prog = {
     .name = "drawing",
     .main = drawing_main,

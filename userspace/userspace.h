@@ -8,6 +8,6 @@ struct userspace_program {
     const char *name;
     userspace_entry main;
     userspace_test test;
-};
+} __attribute__((aligned(8)));
 
 #endif

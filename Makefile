@@ -41,7 +41,9 @@ OS.iso: kernel/kernel.elf
 	./limine/limine bios-install OS.iso
 
 run: OS.iso
-	qemu-system-x86_64 -cdrom OS.iso -boot d -m 256M
-
+	# no gpu
+	# qemu-system-x86_64 -cdrom OS.iso -boot d -m 256M -audiodev pa,id=snd0 -machine pcspk-audiodev=snd0
+	# gpu
+	qemu-system-x86_64 -cdrom OS.iso -boot d -m 256M   -audiodev pa,id=snd0 -machine pcspk-audiodev=snd0   -vga virtio -global virtio-gpu-pci.vgamem_mb=256
 clean:
 	rm -rf iso_root $(OBJS) kernel/kernel.elf OS.iso

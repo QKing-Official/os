@@ -23,12 +23,19 @@ SECTIONS {
         KEEP(*(.limine_requests_end))
     } :rodata
 
-    /* Userspace programs - symbols defined INSIDE so they are exact, no padding tricks */
+    /* Userspace programs - symbols defined INSIDE */
     .userspace_programs : ALIGN(8) {
         __start_userspace_programs = .;
         KEEP(*(.userspace_programs))
         __stop_userspace_programs = .;
     } :rodata
+
+    /* Userspace RAM section - writable, aligned to 4KB - FOR LATER */
+    .userspace_ram : ALIGN(0x1000) {
+        __start_userspace_ram = .;
+        KEEP(*(.userspace_ram))
+        __stop_userspace_ram  = .;
+    } :data
 
     /* Data section */
     .data : ALIGN(0x1000) {
@@ -40,7 +47,7 @@ SECTIONS {
         *(.bss .bss.*)
         *(COMMON)
 
-        /* 64KB kernel stack - enough for deep shell/program call chains */
+        /* 64KB kernel stack - enough for deep shell/program call chains since I'm addicted to big programs */
         . = ALIGN(16);
         stack_bottom = .;
         . += 0x10000;
