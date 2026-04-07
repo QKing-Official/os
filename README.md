@@ -159,6 +159,9 @@ struct userspace_program {
 
 ## Building
 
+> You dont have to build the OS.iso yourself. 
+> You can also download it from the github releases page and skip the building section.
+
 **Ubuntu / Debian:**
 ```bash
 sudo apt update
@@ -187,8 +190,6 @@ make disk.img # first time only — 64 MB blank IDE disk for storage
 ---
 
 ## Running on QEMU
-
-You dont have to build the OS.iso yourself. You can also download it from the github releases page.
 
 ### Linux (build it on debian 13 WSL)
 
@@ -288,7 +289,7 @@ make && make run
 
 **3.** Run it from the shell (`shell> myprog`) or it'll appear automatically in `START → Apps` on the desktop.
 
-### API cheat sheet
+### API cheat sheet (excluding my simple libc)
 
 ```c
 // Graphics (colors are 0xAARRGGBB, use 0xFF prefix)
