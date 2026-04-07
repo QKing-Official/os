@@ -22,3 +22,4 @@ int putchar(int c)
 
     return c;
 }
+// Putchar, used a lot

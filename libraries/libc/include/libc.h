@@ -14,12 +14,15 @@ int   memcmp(const void *a, const void *b, size_t n);
 /* string */
 size_t strlen(const char *s);
 int strcmp(const char *a, const char *b);
-char *strcpy(char *dst, const char *src);
+char *strncpy(char *dst, const char *src, size_t n);
+int strncmp(const char *a, const char *b, size_t n);   // <-- add this
+
 
 /* stdio */
 int putchar(int c);
 int puts(const char *s);
 int printf(const char *fmt, ...);
+int snprintf(char *buf, size_t n, const char *fmt, ...);
 
 /* stdlib */
 int atoi(const char *s);

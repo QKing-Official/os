@@ -48,7 +48,7 @@ struct gpu_driver {
     uint32_t (*get_bg)(void);
 };
 
-// Public API
+// Public API for drawing
 void draw_init(struct limine_framebuffer *framebuffer);
 int gpu_is_hardware_accelerated(void);
 const gpu_info_t* gpu_get_info(void);
@@ -56,7 +56,7 @@ uint64_t gpu_get_vram_size(void);
 uint64_t gpu_get_free_vram(void);
 uint64_t gpu_get_used_vram(void);
 
-// VRAM allocation (simple tracking)
+// VRAM allocation (simple tracking + ram shortage so lets use vram instead)
 uint64_t gpu_alloc_vram(uint64_t size);
 void gpu_free_vram(uint64_t offset);
 

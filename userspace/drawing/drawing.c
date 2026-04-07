@@ -24,6 +24,7 @@ static void draw_cursor(void) {
 }
 
 void drawing_main(void) {
+    keyboard_init();
     set_bg(0xFF0D1117);
     set_fg(0xFFFFFFFF);
 

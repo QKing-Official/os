@@ -3,6 +3,11 @@
 #include "limine.h"
 #include "draw.h"
 #include "timer.h"
+#include "memory.h"
+
+#define HEAP_START 0x1000000   // 16 MB for example
+#define HEAP_SIZE  0x1000000   // 16 MB heap
+
 
 __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[] = LIMINE_BASE_REVISION(6);
@@ -75,7 +80,7 @@ void kmain(void) {
 
     // Initialize RTC timer since I want to see the time
     timer_init();
-    timer_set_timezone(0); // Timezone. 0 = UTC(+0)
+    timer_set_timezone(1); // Timezone. 0 = UTC(+0)
 
     // Draw cool letters
     int mid_x = screen_width() / 2 - 32;
@@ -99,6 +104,9 @@ void kmain(void) {
     // Wait 2 seconds
     timer_delay_s(2);
 
+    // Init memory
+    memory_init(HEAP_START, HEAP_SIZE);
+    
     // THIS IS COOL! (Run init with target program)
     init_main("shell");
 

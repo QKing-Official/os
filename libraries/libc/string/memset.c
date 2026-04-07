@@ -8,3 +8,4 @@ void *memset(void *dst, int c, size_t n)
         d[i] = (unsigned char)c;
     return dst;
 }
+// Set memory

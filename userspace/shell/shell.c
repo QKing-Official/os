@@ -74,7 +74,7 @@ static void shell_print(const char *msg) {
 }
 
 // HOLY FUCK THIS TOOK LONG
-// This can dynamically exuctute and check for existing programs that are in the os.
+// This can dynamically execute and check for existing programs that are in the os.
 // Biggest breakthrough ever!
 // Predefined programs are here as well
 
@@ -100,7 +100,7 @@ static void shell_execute(const char *cmd) {
         shell_print("Commands: cls, clock, help, exit, reboot, shutdown, <program>");
 
     } else if (k_strcmp(cmd, "exit") == 0) {
-        while (1) __asm__("hlt");
+        while (1) __asm__("hlt"); // YES, WHY EXIT THE SHELL!
 
     } else if (k_strcmp(cmd, "reboot") == 0) {
         power_reboot();
@@ -157,3 +157,6 @@ struct userspace_program shell_prog = {
     .main = shell_main,
     .test = shell_test
 };
+
+// Soon it will be in desktop as well
+// Update: It is

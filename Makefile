@@ -1,11 +1,13 @@
 CC      = x86_64-linux-gnu-gcc
 LD      = x86_64-linux-gnu-ld
 CFLAGS  = -m64 -ffreestanding -fno-stack-protector \
-          -mno-red-zone -nostdlib -Ikernel -Ilibraries \
+          -mno-red-zone -nostdlib \
+          -Ikernel -Ilibraries -Iuserspace/storage \
           -mgeneral-regs-only -O2 -mcmodel=large -fno-pic -fno-pie
 LDFLAGS = -nostdlib -static -m elf_x86_64 -z max-page-size=0x1000
 
 SRC_DIRS := kernel libraries userspace
+
 SRCS := $(shell find $(SRC_DIRS) -type f -name '*.c')
 OBJS := $(SRCS:.c=.o)
 
@@ -40,10 +42,17 @@ OS.iso: kernel/kernel.elf
 		-o OS.iso iso_root
 	./limine/limine bios-install OS.iso
 
-run: OS.iso
-	# no gpu works as well but not recommended for this purpose
-	# qemu-system-x86_64 -cdrom OS.iso -boot d -m 256M -audiodev pa,id=snd0 -machine pcspk-audiodev=snd0
-	# gpu
-	qemu-system-x86_64 -cdrom OS.iso -boot d -m 256M   -audiodev pa,id=snd0 -machine pcspk-audiodev=snd0   -vga virtio -global virtio-gpu-pci.vgamem_mb=256
+run: OS.iso disk.img
+	qemu-system-x86_64 \
+		-cdrom OS.iso -boot d \
+		-m 256M \
+		-audiodev pa,id=snd0 -machine pcspk-audiodev=snd0 \
+		-vga virtio -global virtio-gpu-pci.vgamem_mb=256 \
+		-drive file=disk.img,format=raw,if=ide,index=0,media=disk
+
+# Create the disk image if it doesn't exist
+disk.img:
+	qemu-img create -f raw disk.img 64M
+
 clean:
 	rm -rf iso_root $(OBJS) kernel/kernel.elf OS.iso
