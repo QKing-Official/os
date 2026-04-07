@@ -17,7 +17,7 @@ Built during Lock-In week 1 of FlavorTown. No proper name yet so the URL might c
   - `info` — system info screen (memory, screen size, GPU info, etc.)
   - `memtest` — heap stress test
   - `storage` — ATA disk driver with a basic filesystem on top
-- Detects your GPU via a PCI bus scan (Intel, AMD, NVIDIA, VMware, VirtIO) and knows the vendor, device ID, and VRAM size — but doesn't actually *use* it. All rendering goes straight through the Limine framebuffer. The GPU driver stubs (`gpu_memcpy_to_vram` etc.) are there and ready, just not hooked up yet. It's more of a "I know you exist, but fuck you" situation. This will most likely be added in a future update.
+- Detects your GPU via a PCI bus scan (Intel, AMD, NVIDIA, VMware, VirtIO) and knows the vendor, device ID, and VRAM size — but doesn't actually *use* it in most situations currently. All rendering goes straight through the Limine framebuffer except some, which indeed go through the GPU.
 
 ---
 
@@ -27,9 +27,9 @@ Built during Lock-In week 1 of FlavorTown. No proper name yet so the URL might c
 |---|---|---|
 | ![Boot](images/boot.png) | ![Shell](images/shell.png) | ![Desktop](images/desktop.png) |
 
-| Analog Clock | Snake | Music Player |
+| GPU acceleration | Snake | Music Player |
 |---|---|---|
-| ![Clock](images/clock.png) | ![Snake](images/snake.png) | ![Music](images/music.png) |
+| ![GPU acceleration](images/gpu.png) | ![Snake](images/snake.png) | ![Music](images/music.png) |
 
 ---
 
@@ -51,22 +51,22 @@ exit         halt the CPU (rip)
 
 ```
 ┌──────────────────────────────────────────────┐
-│              Userspace Programs               │
+│              Userspace Programs              │
 │  shell  desktop  snake  music  drawing  ...  │
 ├──────────────────────────────────────────────┤
-│                  init system                  │
+│                  init system                 │
 │   (discovers programs, runs test, launches)  │
 ├──────────────────────────────────────────────┤
-│                  Libraries                    │
+│                  Libraries                   │
 │  draw · font · keyboard · mouse · timer      │
 │  memory · speaker · power · libc subset      │
 ├──────────────────────────────────────────────┤
-│                   Kernel                      │
+│                   Kernel                     │
 │   framebuffer init · heap setup · RTC        │
 ├──────────────────────────────────────────────┤
-│             Limine Bootloader                 │
+│             Limine Bootloader                │
 └──────────────────────────────────────────────┘
-         Bare-metal x86-64 hardware
+        VM x86-64 hardware
 ```
 
 The userspace loader works by putting every program struct into a custom `.userspace_programs` ELF section. At runtime `init` scans from `__start_userspace_programs` to `__stop_userspace_programs`, matches the name, runs the test function, and launches it. Biggest breakthrough of the whole project tbh.
@@ -339,4 +339,4 @@ void power_shutdown(void);
 Locking back in now. More stuff coming soon probably.  
 Cya
 
-— More updates will come later!
+— QKing on devlog 6 (ship 1)
