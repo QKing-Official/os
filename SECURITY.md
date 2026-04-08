@@ -9,7 +9,7 @@
 | devlog2   | :warning: |
 | devlog1   | :warning:                |
 
-*:warning:: Those versions are still usable and safe, but I can't provide support for using them.
+:warning:: Those versions are still usable and safe, but I can't provide support for using them.
 
 ## Reporting a Vulnerability
 
