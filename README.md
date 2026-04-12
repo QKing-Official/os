@@ -187,6 +187,8 @@ make          # produces OS.iso
 make disk.img # first time only — 64 MB blank IDE disk for storage
 ```
 
+If you miss a Limine file, clone the limine repo to the limine dir and make all files in the root of that subdirectory.
+
 ---
 
 ## Running on QEMU
