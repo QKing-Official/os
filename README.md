@@ -181,7 +181,7 @@ brew install x86_64-elf-gcc x86_64-elf-binutils xorriso qemu
 
 Then:
 ```bash
-git clone --recurse-submodules https://github.com/youruser/myos.git
+git clone --recurse-submodules https://github.com/QKing-Official/os.git
 cd myos
 make          # produces OS.iso
 make disk.img # first time only — 64 MB blank IDE disk for storage
