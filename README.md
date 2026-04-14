@@ -2,6 +2,8 @@
 
 Built during Lock-In week 1 of FlavorTown. No proper name yet so the URL might change at some point.
 
+https://img.shields.io/github/v/release/QKing-Official/os
+
 ## What it does
 
 - Boots via the **Limine bootloader** and splashes a big **OS** in the middle of your screen
